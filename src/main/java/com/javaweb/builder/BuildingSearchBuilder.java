@@ -19,6 +19,8 @@ public class BuildingSearchBuilder {
     private Long areaFrom;
     private Long areaTo;
     private Long staffId;
+    private String direction;
+    private String level;
     
     private BuildingSearchBuilder (Builder builder) {
     	this.name = builder.name;
@@ -35,7 +37,8 @@ public class BuildingSearchBuilder {
         this.areaFrom = builder.areaFrom;
         this.areaTo = builder.areaTo;
         this.staffId = builder.staffId;
-    	
+    	this.direction = builder.direction;
+    	this.level = builder.level;
     }
     public String getName() {
 		return name;
@@ -80,6 +83,13 @@ public class BuildingSearchBuilder {
 		return staffId;
 	}
 
+	public String getDirection() {
+		return direction;
+	}
+	public String getLevel() {
+		return level;
+	}
+
 
 	public static class Builder {
         private String name;
@@ -96,6 +106,8 @@ public class BuildingSearchBuilder {
         private Long areaFrom;
         private Long areaTo;
         private Long staffId;
+        private String direction;
+        private String level;
 
         public Builder setName(String name) {
             this.name = name;
@@ -167,7 +179,16 @@ public class BuildingSearchBuilder {
             return this;
         }
 
-        public BuildingSearchBuilder build() {
+        
+        public void setDirection(String direction) {
+			this.direction = direction;
+		}
+
+		public void setLevel(String level) {
+			this.level = level;
+		}
+
+		public BuildingSearchBuilder build() {
             return new BuildingSearchBuilder(this);
         }
     }

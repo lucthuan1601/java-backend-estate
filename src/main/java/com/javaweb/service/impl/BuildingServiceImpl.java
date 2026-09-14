@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingDTOConverter;
@@ -31,11 +32,14 @@ public class BuildingServiceImpl implements BuildingService {
 	@Autowired
 	private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
 	
+	
+	//Tìm kiếm tòa nhà theo 16 field
 	public List<BuildingDTO> findAll(Map<String,Object> params, List<String> typeCode) {
 		// TODO Auto-generated method stub
-		
+		//tại sao sử dụng builder
 		BuildingSearchBuilder buildingSearchBuilder = buildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCode);
 		List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchBuilder);
+		
 		List<BuildingDTO> result = new ArrayList<>();
 
 		for (BuildingEntity item : buildingEntities) {
@@ -45,18 +49,26 @@ public class BuildingServiceImpl implements BuildingService {
 		return result;
 		
 	}
-	public void saveBuilding (BuildingRequestDTO buildingRequestDTO) {
-		buildingRepository.createBuilding(buildingRequestDTO);
-	}
-	
+
+
+	//Thêm thông tin tòa nhà mới
 	@Override
-	public void updateBuilding(BuildingRequestDTO buildingRequestDTO) {
+	public void saveBuilding(BuildingRequestDTO buildingRequestDTO) {
 		// TODO Auto-generated method stub
-		buildingRepository.updateBuilding(buildingRequestDTO);
+		BuildingEntity buildingEntity = buildingDTOConverter.toBuildingEntity(buildingRequestDTO);
+		buildingRepository.save(buildingEntity);
 	}
-	@Override
-	public void deleteBuilding(Long id) {
-		buildingRepository.deleteBuilding(id);
-	}
+
+
+	
+	
+	
+
+
+
+
+
+
+
 	
 }

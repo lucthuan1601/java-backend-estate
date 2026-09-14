@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,63 +25,7 @@ import javax.persistence.TemporalType;
 @Table(name = "building")
 public class BuildingEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "districtid",nullable = false)
-	private DistrictEntity district;
-	
-    public DistrictEntity getDistrict() {
-		return district;
-	}
-	public void setDistrict(DistrictEntity district) {
-		this.district = district;
-	}
-
-	
-	
-	
-	@OneToMany(mappedBy = "building",fetch = FetchType.LAZY)
-	private List<RentAreaEntity> rentAreas = new ArrayList<>(); 
-	
-	public List<RentAreaEntity> getRentAreas() {
-		return rentAreas;
-	}
-	public void setRentAreas(List<RentAreaEntity> rentAreas) {
-		this.rentAreas = rentAreas;
-	}
-
-	
-	
-	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "buildingrenttype",
-			joinColumns = @JoinColumn (name = "buildingid", nullable = false),
-			inverseJoinColumns = @JoinColumn (name = "renttypeid",nullable = false))
-	private List<RentTypeEntity> rentTypes = new ArrayList<>();
-
-	public List<RentTypeEntity> getRentTypes() {
-		return rentTypes;
-	}
-	public void setRentTypes(List<RentTypeEntity> rentTypes) {
-		this.rentTypes = rentTypes;
-	}
-	
-	
-	
-	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "assignmentbuilding",
-			joinColumns = @JoinColumn (name = "buildingid", nullable = false),
-			inverseJoinColumns = @JoinColumn (name = "staffid",nullable = false))
-	private List<UserEntity> users  = new ArrayList<>();	
-	public List<UserEntity> getUsers() {
-		return users;
-	}
-	public void setUsers(List<UserEntity> users) {
-		this.users = users;
-	}
-
-
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -97,10 +42,10 @@ public class BuildingEntity {
     private String structure;
 
     @Column(name = "numberofbasement")
-    private Integer numberofbasement;
+    private Integer numberOfBasement;
 
     @Column(name = "floorarea")
-    private Integer floorarea;
+    private Integer floorArea;
 
     @Column(name = "direction")
     private String direction;
@@ -109,28 +54,28 @@ public class BuildingEntity {
     private String level;
 
     @Column(name = "rentprice", nullable = false)
-    private Integer rentprice;
+    private Integer rentPrice;
 
     @Column(name = "rentpricedescription", columnDefinition = "TEXT")
-    private String rentpricedescription;
+    private String rentPriceDescription;
 
     @Column(name = "servicefee")
-    private String servicefee;
+    private String serviceFee;
 
     @Column(name = "carfee")
-    private String carfee;
+    private String carFee;
 
     @Column(name = "motorbikefee")
-    private String motorbikefee;
+    private String motorbikeFee;
 
     @Column(name = "overtimefee")
-    private String overtimefee;
+    private String overtimeFee;
 
     @Column(name = "waterfee")
-    private String waterfee;
+    private String waterFee;
 
     @Column(name = "electricityfee")
-    private String electricityfee;
+    private String electricityFee;
 
     @Column(name = "deposit")
     private String deposit;
@@ -139,19 +84,19 @@ public class BuildingEntity {
     private String payment;
 
     @Column(name = "renttime")
-    private String renttime;
+    private String rentTime;
 
     @Column(name = "decorationtime")
-    private String decorationtime;
+    private String decorationTime;
 
     @Column(name = "brokeragefee", precision = 13, scale = 2)
-    private BigDecimal brokeragefee;
+    private BigDecimal brokerageFee;
 
     @Column(name = "note")
     private String note;
 
     @Column(name = "linkofbuilding")
-    private String linkofbuilding;
+    private String linkOfBuilding;
 
     @Column(name = "map")
     private String map;
@@ -161,25 +106,45 @@ public class BuildingEntity {
 
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
+    private Date createdDate;
 
     @Column(name = "modifieddate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date modifieddate;
+    private Date modifiedDate;
 
     @Column(name = "createdby")
-    private String createdby;
+    private String createdBy;
 
     @Column(name = "modifiedby")
-    private String modifiedby;
+    private String modifiedBy;
 
     @Column(name = "managername")
-    private String managername;
+    private String managerName;
 
     @Column(name = "managerphonenumber")
-    private String managerphonenumber;
+    private String managerPhoneNumber;
 
-    // Getters and Setters
+    // Relationships
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "districtid", nullable = false)
+    private DistrictEntity district;
+
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RentAreaEntity> rentAreas = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "buildingrenttype",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "renttypeid", nullable = false))
+    private List<RentTypeEntity> rentTypes = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "assignmentbuilding",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> users = new ArrayList<>();
+
+    // --- Getters & Setters ---
 
     public Long getId() {
         return id;
@@ -213,8 +178,7 @@ public class BuildingEntity {
         this.ward = ward;
     }
 
-
-	public String getStructure() {
+    public String getStructure() {
         return structure;
     }
 
@@ -222,20 +186,20 @@ public class BuildingEntity {
         this.structure = structure;
     }
 
-    public Integer getNumberofbasement() {
-        return numberofbasement;
+    public Integer getNumberOfBasement() {
+        return numberOfBasement;
     }
 
-    public void setNumberofbasement(Integer numberofbasement) {
-        this.numberofbasement = numberofbasement;
+    public void setNumberOfBasement(Integer numberOfBasement) {
+        this.numberOfBasement = numberOfBasement;
     }
 
-    public Integer getFloorarea() {
-        return floorarea;
+    public Integer getFloorArea() {
+        return floorArea;
     }
 
-    public void setFloorarea(Integer floorarea) {
-        this.floorarea = floorarea;
+    public void setFloorArea(Integer floorArea) {
+        this.floorArea = floorArea;
     }
 
     public String getDirection() {
@@ -254,68 +218,68 @@ public class BuildingEntity {
         this.level = level;
     }
 
-    public Integer getRentprice() {
-        return rentprice;
+    public Integer getRentPrice() {
+        return rentPrice;
     }
 
-    public void setRentprice(Integer rentprice) {
-        this.rentprice = rentprice;
+    public void setRentPrice(Integer rentPrice) {
+        this.rentPrice = rentPrice;
     }
 
-    public String getRentpricedescription() {
-        return rentpricedescription;
+    public String getRentPriceDescription() {
+        return rentPriceDescription;
     }
 
-    public void setRentpricedescription(String rentpricedescription) {
-        this.rentpricedescription = rentpricedescription;
+    public void setRentPriceDescription(String rentPriceDescription) {
+        this.rentPriceDescription = rentPriceDescription;
     }
 
-    public String getServicefee() {
-        return servicefee;
+    public String getServiceFee() {
+        return serviceFee;
     }
 
-    public void setServicefee(String servicefee) {
-        this.servicefee = servicefee;
+    public void setServiceFee(String serviceFee) {
+        this.serviceFee = serviceFee;
     }
 
-    public String getCarfee() {
-        return carfee;
+    public String getCarFee() {
+        return carFee;
     }
 
-    public void setCarfee(String carfee) {
-        this.carfee = carfee;
+    public void setCarFee(String carFee) {
+        this.carFee = carFee;
     }
 
-    public String getMotorbikefee() {
-        return motorbikefee;
+    public String getMotorbikeFee() {
+        return motorbikeFee;
     }
 
-    public void setMotorbikefee(String motorbikefee) {
-        this.motorbikefee = motorbikefee;
+    public void setMotorbikeFee(String motorbikeFee) {
+        this.motorbikeFee = motorbikeFee;
     }
 
-    public String getOvertimefee() {
-        return overtimefee;
+    public String getOvertimeFee() {
+        return overtimeFee;
     }
 
-    public void setOvertimefee(String overtimefee) {
-        this.overtimefee = overtimefee;
+    public void setOvertimeFee(String overtimeFee) {
+        this.overtimeFee = overtimeFee;
     }
 
-    public String getWaterfee() {
-        return waterfee;
+    public String getWaterFee() {
+        return waterFee;
     }
 
-    public void setWaterfee(String waterfee) {
-        this.waterfee = waterfee;
+    public void setWaterFee(String waterFee) {
+        this.waterFee = waterFee;
     }
 
-    public String getElectricityfee() {
-        return electricityfee;
+    public String getElectricityFee() {
+        return electricityFee;
     }
 
-    public void setElectricityfee(String electricityfee) {
-        this.electricityfee = electricityfee;
+    public void setElectricityFee(String electricityFee) {
+        this.electricityFee = electricityFee;
     }
 
     public String getDeposit() {
@@ -334,28 +298,28 @@ public class BuildingEntity {
         this.payment = payment;
     }
 
-    public String getRenttime() {
-        return renttime;
+    public String getRentTime() {
+        return rentTime;
     }
 
-    public void setRenttime(String renttime) {
-        this.renttime = renttime;
+    public void setRentTime(String rentTime) {
+        this.rentTime = rentTime;
     }
 
-    public String getDecorationtime() {
-        return decorationtime;
+    public String getDecorationTime() {
+        return decorationTime;
     }
 
-    public void setDecorationtime(String decorationtime) {
-        this.decorationtime = decorationtime;
+    public void setDecorationTime(String decorationTime) {
+        this.decorationTime = decorationTime;
     }
 
-    public BigDecimal getBrokeragefee() {
-        return brokeragefee;
+    public BigDecimal getBrokerageFee() {
+        return brokerageFee;
     }
 
-    public void setBrokeragefee(BigDecimal brokeragefee) {
-        this.brokeragefee = brokeragefee;
+    public void setBrokerageFee(BigDecimal brokerageFee) {
+        this.brokerageFee = brokerageFee;
     }
 
     public String getNote() {
@@ -366,12 +330,12 @@ public class BuildingEntity {
         this.note = note;
     }
 
-    public String getLinkofbuilding() {
-        return linkofbuilding;
+    public String getLinkOfBuilding() {
+        return linkOfBuilding;
     }
 
-    public void setLinkofbuilding(String linkofbuilding) {
-        this.linkofbuilding = linkofbuilding;
+    public void setLinkOfBuilding(String linkOfBuilding) {
+        this.linkOfBuilding = linkOfBuilding;
     }
 
     public String getMap() {
@@ -390,51 +354,83 @@ public class BuildingEntity {
         this.image = image;
     }
 
-    public Date getCreateddate() {
-        return createddate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateddate(Date createddate) {
-        this.createddate = createddate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public Date getModifieddate() {
-        return modifieddate;
+    public Date getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setModifieddate(Date modifieddate) {
-        this.modifieddate = modifieddate;
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
-    public String getCreatedby() {
-        return createdby;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreatedby(String createdby) {
-        this.createdby = createdby;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public String getModifiedby() {
-        return modifiedby;
+    public String getModifiedBy() {
+        return modifiedBy;
     }
 
-    public void setModifiedby(String modifiedby) {
-        this.modifiedby = modifiedby;
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 
-    public String getManagername() {
-        return managername;
+    public String getManagerName() {
+        return managerName;
     }
 
-    public void setManagername(String managername) {
-        this.managername = managername;
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
     }
 
-    public String getManagerphonenumber() {
-        return managerphonenumber;
+    public String getManagerPhoneNumber() {
+        return managerPhoneNumber;
     }
 
-    public void setManagerphonenumber(String managerphonenumber) {
-        this.managerphonenumber = managerphonenumber;
+    public void setManagerPhoneNumber(String managerPhoneNumber) {
+        this.managerPhoneNumber = managerPhoneNumber;
+    }
+
+    public DistrictEntity getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(DistrictEntity district) {
+        this.district = district;
+    }
+
+    public List<RentAreaEntity> getRentAreas() {
+        return rentAreas;
+    }
+
+    public void setRentAreas(List<RentAreaEntity> rentAreas) {
+        this.rentAreas = rentAreas;
+    }
+
+    public List<RentTypeEntity> getRentTypes() {
+        return rentTypes;
+    }
+
+    public void setRentTypes(List<RentTypeEntity> rentTypes) {
+        this.rentTypes = rentTypes;
+    }
+
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 }
