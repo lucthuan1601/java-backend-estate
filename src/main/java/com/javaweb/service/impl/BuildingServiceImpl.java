@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingDTOConverter;
@@ -58,6 +57,34 @@ public class BuildingServiceImpl implements BuildingService {
 		BuildingEntity buildingEntity = buildingDTOConverter.toBuildingEntity(buildingRequestDTO);
 		buildingRepository.save(buildingEntity);
 	}
+	//Xóa 1 tòa nhà
+	@Override
+	public void deleteBuilding (Long id) {
+		BuildingEntity buildingEntity = buildingRepository.findById(id).orElseThrow(()-> new RuntimeException("Tòa nhà không tồn tại với Id:"+id));
+		buildingRepository.delete(buildingEntity);
+	}
+
+
+	@Override
+	public void deleteBuildings(List<Long> ids) {
+		// TODO Auto-generated method stub
+		List<BuildingEntity> buildingEntities = buildingRepository.findAllById(ids);
+		if(buildingEntities.isEmpty()) {
+			throw new RuntimeException("Không tìm thấy tòa nhà nào để xóa");
+		}
+		buildingRepository.deleteAll(buildingEntities);
+		
+	}
+
+
+	@Override
+	public void updateBuilding(Long id, BuildingRequestDTO buildingRequestDTO) {
+		// TODO Auto-generated method stub
+		BuildingEntity buildingEntity = buildingRepository.findById(id).orElseThrow(()->new RuntimeException("Tòa nhà không tồn tại với Id:"+id));
+		buildingEntity = buildingDTOConverter.toBuildingEntityForUpdate(buildingRequestDTO, buildingEntity);
+		buildingRepository.save(buildingEntity);
+	}
+	
 
 
 	
